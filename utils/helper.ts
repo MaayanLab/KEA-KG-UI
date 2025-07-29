@@ -131,12 +131,12 @@ export const kind_mapper = ({node, type, enrichment_subtypes, augmented_genes, g
     if (enrichment_subtypes !== undefined) {
         if ((JSON.stringify(enrichment_subtypes.query_terms)).indexOf(JSON.stringify(node.properties.label)) > -1 && (JSON.stringify(enrichment_subtypes.result_terms)).indexOf(JSON.stringify(node.properties.label)) > -1) {
             // node.properties.color = "#ffe561"
-            return "Queried TFs that are also enriched"
+            return "Top Ranked Kinases"
         } else if ((JSON.stringify(enrichment_subtypes.result_terms)).indexOf(JSON.stringify(node.properties.label)) > -1) {
             // node.properties.color = "#ff6169"
-            return "Top Ranked TFs"
+            return "Top Ranked Kinases"
         } else {
-            return "Expanded TFs"
+            return "Expanded Kinases"
         }
     }
     else if (type !== "Gene") return type

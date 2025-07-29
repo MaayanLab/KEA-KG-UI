@@ -21,7 +21,7 @@ export const kea_query = async ({
     const info = await data.json()
     console.log(`sending to KEA3`)
     let d = info
-    const gs = await verify_input(d.set, true)
+    // const gs = await verify_input(d.set, true)
     // const gs = s.split('\r\n')
     const res = await fetch(`${process.env.NEXT_PUBLIC_KEA3_URL}/api/enrich/`, {
         method: 'POST',
@@ -30,10 +30,11 @@ export const kea_query = async ({
            },
         body: JSON.stringify( {
             query_name: info.desc,
-            gene_set: gs
+            gene_set: d.set.map(i=>i.split("_")[0])
         })
     }
     )
+    console.log(d.set.map(i=>i.split("_")[0]).join("\n"))
 
     if (res.ok !== true) {
         console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/view`)
@@ -110,7 +111,6 @@ export const kea_query = async ({
             }
         }
     }
-    console.log(terms)
     return {genes, terms, max_score, min_score, library}
 }
 

@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 
 import Grid from '@mui/material/Grid';
 import ErrorIcon from '@mui/icons-material/Error';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { 
     Card, 
     CardContent,  
@@ -261,10 +262,14 @@ const GeneSetForm = ({
                                         {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 1, paddingTop: 2, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map(i=>{
-                                                if (verified.indexOf(i.trim().toUpperCase()) > -1) return <Typography key={i} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
+                                                if (verified.indexOf(i.trim().toUpperCase()) > -1) return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start">
+                                                    <Typography key={i} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography><CheckCircleIcon color="primary" sx={{width: 15}}/>
+                                                    </Stack>
                                                 else {
                                                     if (i === '') return null
-                                                    else return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} sx={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" sx={{width: 15}}/></Stack>
+                                                    else return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start">
+                                                        <Typography align='left' color={'default'} sx={{fontSize: 14}}>{i}</Typography>
+                                                        </Stack>
                                                 }
                                             })}
                                         </CardContent>
@@ -329,7 +334,7 @@ const GeneSetForm = ({
                                         // disabled={input.genes.length === 0}
                                     >{loading || verifying ? "Searching...": "Submit"}</Button>
                                 </Tooltip>
-                                {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched genes"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched genes`}</Typography></Button></Tooltip>}
+                                {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched kinase phosphosite"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched phosphosites`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>
                         { fullWidth && 
