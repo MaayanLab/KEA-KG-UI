@@ -5,7 +5,7 @@ import { UISchema } from "@/app/api/schema/route";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { router_push } from "@/utils/client_side";
 import { parseAsJson } from "next-usequerystate";
-import { EnrichmentParams } from "../Chea3Enrichment";
+import { EnrichmentParams } from "../Enrichment";
 import { FilterSchema } from "@/utils/helper";
 import { useState } from "react";
 

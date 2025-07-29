@@ -6,7 +6,7 @@ import { Grid, Button, Tabs, Tab, Card, CardContent } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
 import { UISchema } from "@/app/api/schema/route";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
-import { CustomToolbar } from "../Chea3Enrichment/NetworkTable";
+import { CustomToolbar } from "../Enrichment/NetworkTable";
 const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) => {
 	const [processedData, setProcessedData] = useState<{
 		[key:string]: {

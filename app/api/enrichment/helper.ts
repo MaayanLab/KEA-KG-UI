@@ -1,6 +1,6 @@
 import { get_regex } from "./get_regex/helper"
 import { verify_input } from "./terms_and_genes/helper"
-export const chea_query = async ({
+export const kea_query = async ({
     userListId,
     library,
     min_lib,
@@ -19,11 +19,11 @@ export const chea_query = async ({
     }
     
     const info = await data.json()
-    console.log(`sending to ChEA3`)
+    console.log(`sending to KEA3`)
     let d = info
     const gs = await verify_input(d.set, true)
     // const gs = s.split('\r\n')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CHEA3_URL}/api/enrich/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_KEA3_URL}/api/enrich/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ export const chea_query = async ({
 
     if (res.ok !== true) {
         console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/view`)
-        throw new Error(`Error communicating with ChEA3`)
+        throw new Error(`Error communicating with KEA3`)
     } 
     const regex = {}
     const reg:{[key:string]: string} = await get_regex()
@@ -110,6 +110,7 @@ export const chea_query = async ({
             }
         }
     }
+    console.log(terms)
     return {genes, terms, max_score, min_score, library}
 }
 

@@ -6,7 +6,7 @@ import { Grid, Button, Tabs, Tab, Card, CardContent } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { UISchema } from "@/app/api/schema/route";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
-import { CustomToolbar } from "../Chea3Enrichment/NetworkTable";
+import { CustomToolbar } from "../Enrichment/NetworkTable";
 import Icon from '@mdi/react';
 import { mdiOpenInNew } from '@mdi/js';
 const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) => {

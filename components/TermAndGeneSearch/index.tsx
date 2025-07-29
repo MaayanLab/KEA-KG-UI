@@ -200,7 +200,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                 <div style={{minHeight: 700, position: "relative"}}>
                                     {filter.end_term ? 
                                     <Typography variant="h5" sx={{textAlign: "center"}}><b>Connections Between {filter.start_term} and {filter.end_term}</b></Typography>:
-                                    <Typography variant="h5" sx={{textAlign: "center"}}><b>Subnetwork of TFs Connected to {filter.start_term}</b></Typography>
+                                    <Typography variant="h5" sx={{textAlign: "center"}}><b>Subnetwork of Kinases Connected to {filter.start_term}</b></Typography>
                                     }
                                     <Cytoscape 
                                         elements={elements}

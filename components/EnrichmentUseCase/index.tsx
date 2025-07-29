@@ -7,14 +7,14 @@ import {
     CardContent,
     CircularProgress
 } from "@mui/material";
-import TermViz from "@/components/Chea3Enrichment/TermViz";
+import TermViz from "@/components/Enrichment/TermViz";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 import { parseAsJson } from "next-usequerystate";
-import InteractiveButtons from "@/components/Chea3Enrichment/InteractiveButtons";
+import InteractiveButtons from "@/components/Enrichment/InteractiveButtons";
 import { fetch_kg_schema, fetch_atlas_schema } from "@/utils/initialize";
 import TooltipComponentGroup from "../TermAndGeneSearch/tooltip";
 import QueryForm from "./QueryForm";
-import { get_element } from "../Chea3Enrichment/element_resolver";
+import { get_element } from "../Enrichment/element_resolver";
 import { UISchema } from "@/app/api/schema/route";
 
 export interface EnrichmentParams {

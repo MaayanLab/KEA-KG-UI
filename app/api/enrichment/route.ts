@@ -4,7 +4,7 @@ import { compute_colors, kind_mapper } from "@/utils/helper";
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server'
 import { z } from 'zod';
-import { chea_query } from "./helper";
+import { kea_query } from "./helper";
 import { fetch_kg_schema } from "@/utils/initialize";
 import { initialize } from "../initialize/helper";
 const get_node_color_and_type = ({node,
@@ -87,8 +87,8 @@ const enrichment = async ({
                 term_limit = add_nodes
 
             }
-            // term limit is doubled in chea_query -- returns twice as many results
-            return await chea_query({userListId, term_limit, library, min_lib: 3, term_degree})
+            // term limit is doubled in kea_query -- returns twice as many results
+            return await kea_query({userListId, term_limit, library, min_lib: 3, term_degree})
         }  
         ))
 
@@ -145,7 +145,7 @@ const enrichment = async ({
         // filter gene list based on parameters
         let genes = Object.keys(gene_counts)
         {/*if (min_lib) {
-            terms = Object.entries(terms).filter(key=>terms['Transcription Factor'][key].libs >= min_lib)
+            terms = Object.entries(terms).filter(key=>terms['kinase'][key].libs >= min_lib)
             console.log("terms:", terms[node_mapping[library]][key]["libs"])
             // genes = Object.keys(gene_counts).filter(gene=>gene_counts[gene].libraries >= min_lib)
             // terms = Object.entries(terms).filter(term=>terms.libs >= min_lib)
@@ -164,15 +164,13 @@ const enrichment = async ({
         
         for (const [node, lib_terms] of Object.entries(library_terms)) {
             let query_part = `
-                MATCH p =(a:\`Transcription Factor\`)
+                MATCH p =(a:\`kinase\`)
                 WHERE a.label IN ${JSON.stringify(lib_terms)} 
                 RETURN  p, nodes(p) as n, relationships(p) as r
                 UNION
-                MATCH p = (a:\`Transcription Factor\`)-[rel]-(b:\`Transcription Factor\`)
+                MATCH p = (a:\`kinase\`)-[r1:phosphorylates]-(b:kinase_phosphosite)-[r2:phosphosite]-(c:\`kinase\`)
                 WHERE a.label IN ${JSON.stringify(lib_terms)} 
-                AND b.label IN ${JSON.stringify(lib_terms)}
-                ${(typeof pvalue === 'number') ? "AND rel.p_value <= " + pvalue : ""}
-                ${(typeof zscore === 'number') ? "AND rel.z_score >= " + zscore : ""}
+                AND c.label IN ${JSON.stringify(lib_terms)}
             `
             
             //vars[`remove_${ind}`] = remove[ind]
@@ -184,7 +182,7 @@ const enrichment = async ({
             `
             
             query_part = query_part + `RETURN  p, nodes(p) as n, relationships(p) as r`
-            if (limit) query_part = query_part + ` ORDER BY rel.z_score DESC LIMIT ${limit}`
+            if (limit) query_part = query_part + ` ORDER BY r1.percentile DESC LIMIT ${limit}`
             query_list.push(query_part)   
             searched.push(genes)
             returned.push(lib_terms)
@@ -230,14 +228,13 @@ const enrichment = async ({
                     WHERE (c.id = ${(JSON.stringify(expand[ind]).replace(/\"/g,""))} 
                         AND NOT c.id in ${JSON.stringify(remove).replace(/\"/g,"")} 
                         AND NOT d.id in ${JSON.stringify(remove).replace(/\"/g,"")} )
-                    UNWIND relationships(p) as reln WITH nodes(p) as n, reln, p ORDER BY reln.z_score DESC WITH COLLECT {RETURN reln} as r, n, p RETURN n, r, p
+                    UNWIND relationships(p) as reln WITH nodes(p) as n, reln, p ORDER BY reln.percentile DESC WITH COLLECT {RETURN reln} as r, n, p RETURN n, r, p
                     LIMIT 10
                 `)   
             }
         }  
         
         const query = query_list.join(' UNION ')
-        console.log(query)
         const query_params = {limit: expand_limit, ...vars}
         const enrichment_subtypes = {query_terms: searched, result_terms: returned}
         return resolve_results({query, kind_mapper, enrichment_subtypes, query_params, aggr_scores, colors, kind_properties: terms, get_node_color_and_type, arrow_shape})
