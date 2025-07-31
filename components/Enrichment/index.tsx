@@ -163,36 +163,6 @@ const Enrichment = async ({
             <Grid container spacing={1} alignItems={"flex-start"}>
                 <Grid item xs={12}>
                     <Typography variant={"h2"}>{props.title || "Enrichment Analysis"}</Typography>
-                    <Box>
-                        <Typography gutterBottom variant={"subtitle1"}>Enter a set of Entrez gene symbols below to perform transcription factor enrichment analysis using&nbsp;
-                            <Link href={"https://maayanlab.cloud/chea3/"} 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{color: "black", textDecoration: "underline"}}
-                            >
-                                <span style={{fontSize: 16, fontWeight: 700, fontFamily: "Rubik, sans-serif"}}>ChEA3</span>
-                            </Link>. The result is a subnetwork of connected transcription factors enriched for the query set.
-                            <br />Learn how to prepare differentially expressed gene sets from an RNA-seq gene expression count matrix: &nbsp;  
-                                <Link href='https://colab.research.google.com/drive/1hE-bBBE38YndLlbjMO3m-Tv38MssKjVc?usp=sharing' target='_blank' rel='noopener noreferrer'>
-                                
-                                
-                                    <Button size='small' variant="outlined" sx={{ color:'black', borderColor:'black',p:'5px' }}>
-                                        Gene count matrix demo notebook in Google Colab &nbsp;<OpenInNewIcon fontSize='small'/>
-                                    </Button>
-                                
-                            </Link>
-                            <br />Learn how to prepare gene sets from a BED file:&nbsp;
-                            <Link href='https://colab.research.google.com/drive/1PQ6xhmARN1yh0X6YnOle39tTIYjpmS5u?usp=sharing' target='_blank' rel='noopener noreferrer'>
-                            
-                          
-                                    <Button size='small' variant="outlined" sx={{ color: 'black', borderColor:'black',p:'5px' }}>
-                                        BED file demo notebook in Google Colab &nbsp;<OpenInNewIcon fontSize='small'/>
-                                    </Button>
-           
-                            </Link>
-                                </Typography>
-
-                    </Box>
                 </Grid>
                 <Grid item xs={12} md={elements===null?12:3}>
                     <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === "cfde_theme" || elements !== null) ? "tertiary.light": "#FFF"}}>
@@ -249,18 +219,6 @@ const Enrichment = async ({
                         </Stack>
                     </Grid>
                 }
-                <Grid item xs={12} spacing={2}>
-                    <Typography variant={"subtitle1"} style={{fontSize:12, fontWeight:"bolder"}}> Please acknowledge ChEA3 in your publications using the following reference: </Typography>
-                    <Typography variant={"body1"} style={{fontSize:12}}> Keenan AB, Torre D, Lachmann A, Leong AK, Wojciechowicz M, Utti V, Jagodnik K, Kropiwnicki E, Wang Z, Ma&apos;ayan A (2019) ChEA3: transcription factor enrichment analysis by orthogonal omics integration. Nucleic Acids Research. doi:&nbsp;
-                            <Link href={"https://doi.org/10.1093/nar/gkz446"} 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <span>10.1093/nar/gkz446</span>
-                            </Link>
-                    
-                    </Typography>
-                </Grid>
             </Grid>
         )
     } catch (error) {

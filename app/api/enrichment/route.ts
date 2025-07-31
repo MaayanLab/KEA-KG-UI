@@ -91,7 +91,6 @@ const enrichment = async ({
             return await kea_query({userListId, term_limit, library, min_lib: 3, term_degree})
         }  
         ))
-
         const gene_counts = {}
         let terms = {}
         const library_terms: {[key:string]: Array<string>} = {}
@@ -99,9 +98,12 @@ const enrichment = async ({
         let min_score = 10000
         let searched = []
         let returned = []
-        for (const {genes: lib_genes, terms: lib_terms, max_score: lib_max_score, min_score: lib_min_score, library} of results) {
+        let input_set = []
+        for (const {genes: lib_genes, terms: lib_terms, max_score: lib_max_score, min_score: lib_min_score, library, input} of results) {
             terms[node_mapping[library]] = {}
- 
+            for (const i of input) {
+                if (input_set.indexOf(i) == -1) input_set.push(i)
+            }
             // go through all of the results for that library until we have ten enriched genes
             for (const [key, val] of Object.entries(lib_terms)) {
                 if (val["score"] !== undefined) {
@@ -236,7 +238,7 @@ const enrichment = async ({
         
         const query = query_list.join(' UNION ')
         const query_params = {limit: expand_limit, ...vars}
-        const enrichment_subtypes = {query_terms: searched, result_terms: returned}
+        const enrichment_subtypes = {query_terms: input_set, result_terms: returned}
         return resolve_results({query, kind_mapper, enrichment_subtypes, query_params, aggr_scores, colors, kind_properties: terms, get_node_color_and_type, arrow_shape})
     } catch (error) {
         throw error

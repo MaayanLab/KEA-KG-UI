@@ -129,21 +129,15 @@ export const convert_query = (req: NextRequest) => {
 export const kind_mapper = ({node, type, enrichment_subtypes, augmented_genes, gene_list}) => {
     const label = node.label
     if (enrichment_subtypes !== undefined) {
-        if ((JSON.stringify(enrichment_subtypes.query_terms)).indexOf(JSON.stringify(node.properties.label)) > -1 && (JSON.stringify(enrichment_subtypes.result_terms)).indexOf(JSON.stringify(node.properties.label)) > -1) {
-            // node.properties.color = "#ffe561"
-            return "Top Ranked Kinases"
-        } else if ((JSON.stringify(enrichment_subtypes.result_terms)).indexOf(JSON.stringify(node.properties.label)) > -1) {
-            // node.properties.color = "#ff6169"
-            return "Top Ranked Kinases"
-        } else {
-            return "Expanded Kinases"
+        if ((enrichment_subtypes.query_terms || []).indexOf(node.properties.label) > -1) {
+            if (node.properties.label.split("_").length > 1) {
+                return "input_kinase_phosphosite"
+            } else {
+                return "input_kinase"
+            }
         }
     }
-    else if (type !== "Gene") return type
-        
-    if (augmented_genes.indexOf(label) > -1 && gene_list.indexOf(label) == -1) {
-        return "Predicted Gene (Co-Expression)"
-    } else return "Gene"
+    return type
     
 }
 

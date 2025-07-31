@@ -12,27 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
   // optionally access and extend (rather than replace) parent metadata
   const metadata: Metadata = {
     title: header.icon.faviconTitle || header.title,
-    description: 'Search for subnetworks within the ChEA-KG GRN by entering one or two TFs. The background GRN contains 131,181 signed and directed TF-TF regulatory relationships between 1559 source and 700 target human transcription factors.',
+    description: 'Search for subnetworks within the KEA-KG GRN by entering one or two kinases. The background GRN contains 131,181 signed and directed kinase-kinase regulatory relationships between 1559 source and 700 target human transcription factors.',
     icons: {
       icon: header.icon.favicon
     },
-    openGraph: {
-      title: 'ChEA-KG',
-      description: 'Search for subnetworks within the ChEA-KG GRN by entering one or two TFs. The background GRN contains 131,181 signed and directed TF-TF regulatory relationships between 1,559 target and 700 source human transcription factors.',
-      url: 'https://chea-kg.maayanlab.cloud/',
-      siteName: 'ChEA-KG',
-      images: [
-        {
-          url:'https://chea-kg.maayanlab.cloud/hgrnchear_logo.png',
-          width: 1024,
-          height: 998
-        }
-      ],
-      locale:'en_US',
-      type: 'website'
     }
-
-  }
   return metadata
 }
 

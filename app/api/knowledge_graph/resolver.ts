@@ -80,6 +80,7 @@ export const resolve_results = async ({
             let color_index = 0
             let shade_index = 0
             const shade = ["A100", 200, "A700", "400", "A400"]
+            console.log(colors)
             const colors_func = (type) => {
                 if (colors[type] && colors[type].color) {
                     color_values[type] = colors[type]

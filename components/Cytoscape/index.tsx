@@ -105,6 +105,7 @@ export default function Cytoscape ({
 	const searchParams = useSearchParams()
 	const filter = searchParams.get('q') || searchParams.get('filter')
 	const { mutate } = useSWRConfig()
+	console.log(elements)
 	useEffect(()=>{
 		const cytoscape = require('cytoscape')
 		const svg = require('cytoscape-svg')

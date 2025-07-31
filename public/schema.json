@@ -41,7 +41,51 @@
             "search": [
                 "label"
             ],
-            "color": "#80D8FF"
+            "color": "#c5e1a5"
+        },
+        {
+            "node": "input_kinase",
+            "example": [
+                "CHUK",
+                "MAST4"
+            ],
+            "display": [
+                {
+                    "label": "Kinase",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "Harmonizome",
+                    "href": "https://maayanlab.cloud/Harmonizome/gene/${label}",
+                    "text": "${label}",
+                    "type": "link"
+                },
+                {
+                    "label": "ARCHS4",
+                    "href": "https://maayanlab.cloud/archs4/gene/${label}",
+                    "text": "${label}",
+                    "type": "link"
+                },
+                {
+                    "label": "GDLPA",
+                    "href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true",
+                    "text": "${label}",
+                    "type": "link"
+                },
+                {
+                    "label": "NCBI Gene",
+                    "href": "https://www.ncbi.nlm.nih.gov/gene/${id.replace('NCBI:', '')}",
+                    "text": "${id}",
+                    "type": "link"
+                }
+            ],
+            "relation": [],
+            "search": [
+                "label"
+            ],
+            "color": "#DAB1DA",
+            "border_color": "#FFC0CB"
         },
         {
             "node": "kinase_phosphosite",
@@ -61,6 +105,25 @@
                 "label"
             ],
             "color": "#00caff"
+        },
+        {
+            "node": "input_kinase_phosphosite",
+            "example": [
+                "AAK1_T23",
+                "AKT2_S888"
+            ],
+            "display": [
+                {
+                    "label": "Kinase Phosphosite",
+                    "text": "${label}",
+                    "type": "text"
+                }
+            ],
+            "relation": [],
+            "search": [
+                "label"
+            ],
+            "color": "#FFC0CB"
         }
     ],
     "edges": [

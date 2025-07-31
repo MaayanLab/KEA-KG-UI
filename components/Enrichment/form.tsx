@@ -7,12 +7,10 @@ import { router_push, usePrevious } from '@/utils/client_side';
 import { delay } from '@/utils/helper';
 import Button from '@mui/material/Button'
 
-import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 
 import Grid from '@mui/material/Grid';
 import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { 
     Card, 
     CardContent,  
@@ -27,12 +25,7 @@ import LibraryPicker from './LibraryPicker';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { useQueryState, parseAsJson } from 'next-usequerystate';
 import { EnrichmentParams } from '.';
-const TooltipWrapper = ({title, children, disabled}: {title: string, disabled?: boolean, children: React.ReactElement}) => {
-    if (disabled) return children
-    else {
-        <Tooltip title={title}>{children}</Tooltip>
-    }
-} 
+
 
 const GeneSetForm = ({
     example,
@@ -278,12 +271,8 @@ const GeneSetForm = ({
                                         {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 1, paddingTop: 2, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map((i, ind)=>{
-                                                if ((verified.kinase_phosphosites || []).indexOf(i.trim().toUpperCase()) > -1) return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
-                                                    <Typography color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
-                                                    </Stack>
-                                                else if ((verified.substrates || []).indexOf(i.trim().split("_")[0].toUpperCase()) > -1) return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
-                                                    <Typography color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
-                                                    </Stack>
+                                                if ((verified.kinase_phosphosites || []).indexOf(i.trim().toUpperCase()) > -1) return <Typography key={`${i}-${ind}`} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
+                                                else if ((verified.substrates || []).indexOf(i.trim().split("_")[0].toUpperCase()) > -1) return <Typography key={`${i}-${ind}`} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
                                                 else {
                                                     if (i === '') return null
                                                     else return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
@@ -351,8 +340,10 @@ const GeneSetForm = ({
                                     }}
                                     // disabled={input.genes.length === 0}
                                 >{loading || verifying ? "Searching...": "Submit"}</Button>
-                                
-                                {(((verified.substrates || []).length > 0 || (verified.kinase_phosphosites || []).length > 0) && input.genes.length > 0 && parsedParams.userListId === undefined) && <Tooltip title="Matches"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.kinase_phosphosites.length} matched kinase phosphosites and ${verified.substrates.length} matched substrates`}</Typography></Button></Tooltip>}
+                                <Stack>
+                                {(verified.substrates || []).length > 0 && <Typography color={'secondary'} variant='subtitle2'> {`${verified.substrates.length} matched substrates`}</Typography>}
+                                {(verified.kinase_phosphosites || []).length > 0 && <Typography color={'secondary'} variant='subtitle2'> {`${verified.kinase_phosphosites.length} matched kinase phosphosites`}</Typography>}
+                                </Stack>
                             </Stack>
                         </Grid>
                         { fullWidth && 

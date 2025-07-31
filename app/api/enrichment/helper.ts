@@ -34,7 +34,6 @@ export const kea_query = async ({
         })
     }
     )
-    console.log(d.set.map(i=>i.split("_")[0]).join("\n"))
 
     if (res.ok !== true) {
         console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/view`)
@@ -56,8 +55,8 @@ export const kea_query = async ({
         if (Object.keys(terms).length >= term_limit) break
 
         const rank = i.Rank
-        const chea3label = i.TF
-        const label = regex[library] !== undefined ? regex[library].exec(chea3label).groups.label:chea3label
+        const res_label = i.TF
+        const label = regex[library] !== undefined ? regex[library].exec(res_label).groups.label:res_label
         const score = parseFloat(i.Score)
         let rank_sum = 0
         const libs = i.Library.split(';').map(i => {
@@ -77,7 +76,7 @@ export const kea_query = async ({
 
             // if there is no existing term just put it on top -- add the properties
             if (terms[label].score === undefined) {
-                terms[label].enrichr_label = chea3label
+                terms[label].enrichr_label = res_label
                 terms[label].score = score
                 terms[label].rank = rank
                 terms[label].overlap = overlapping_genes.length
@@ -99,7 +98,7 @@ export const kea_query = async ({
                     rank_sum
                 })
                 if (terms[label].score > score) {
-                    terms[label].enrichr_label = chea3label
+                    terms[label].enrichr_label = res_label
                     terms[label].score = score
                     terms[label].rank = rank
                     terms[label].overlap = overlapping_genes.length
@@ -111,7 +110,7 @@ export const kea_query = async ({
             }
         }
     }
-    return {genes, terms, max_score, min_score, library}
+    return {genes, terms, max_score, min_score, library, input: d.set}
 }
 
 export const enrichr_query = async ({
