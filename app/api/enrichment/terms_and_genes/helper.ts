@@ -10,8 +10,8 @@ export const verify_input = async (input:Array<string>, convert:Boolean) => {
 			defaultAccessMode: neo4j.session.READ
 		})
 		try {
-			const query = `MATCH (n:kinase_phosphosite)
-				WHERE n.label IN ${JSON.stringify(input)}
+			const query = `MATCH (n)
+				WHERE n.label IN ${JSON.stringify([...input, ...input.map(i=>i.split("_")[0])])}
 				RETURN n
 			`
 			

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 import Tooltip from '@mui/material/Tooltip';
@@ -27,6 +27,12 @@ import LibraryPicker from './LibraryPicker';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { useQueryState, parseAsJson } from 'next-usequerystate';
 import { EnrichmentParams } from '.';
+const TooltipWrapper = ({title, children, disabled}: {title: string, disabled?: boolean, children: React.ReactElement}) => {
+    if (disabled) return children
+    else {
+        <Tooltip title={title}>{children}</Tooltip>
+    }
+} 
 
 const GeneSetForm = ({
     example,
@@ -47,7 +53,7 @@ const GeneSetForm = ({
         
     const pathname = usePathname()
     const [input, setInput] = useState<{genes: Array<string>, description: string}>({genes: [], description: ''})
-    const [verified, setVerified] = useState<Array<string>>([])
+    const [verified, setVerified] = useState<{substrates?: Array<string>, kinase_phosphosites?: Array<string>}>({})
     const [inputError, setInputError] = useState<boolean>(false)
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const [loading, setLoading] = useQueryState('loading')
@@ -144,7 +150,17 @@ const GeneSetForm = ({
                     signal: controller.signal
                 })
             ).json()
-            setVerified(verified.map(i => i.trim()))
+            const acc = {"substrates": [], "kinase_phosphosites": []}
+            for (const i of verified) {
+                console.log(i.split("_").length)
+                if (i.split("_").length > 1) {
+                    console.log(i)
+                    acc["kinase_phosphosites"].push(i)
+                } else {
+                    acc['substrates'].push(i)
+                }
+            }
+            setVerified(acc)
         } catch (error) {
             console.error(error)
         }
@@ -205,7 +221,7 @@ const GeneSetForm = ({
     }, [inputError])
 
     useEffect(()=>{
-        if (input.genes.length === 0) setVerified([])
+        if (input.genes.length === 0) setVerified({})
         else verifyList(input.genes.map(i=>i.toUpperCase()))
     }, [input.genes])
 
@@ -261,14 +277,17 @@ const GeneSetForm = ({
                                     <Card sx={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}} onClick={() => setIsFocused(true)}>
                                         {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 1, paddingTop: 2, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
-                                            {input.genes.map(i=>{
-                                                if (verified.indexOf(i.trim().toUpperCase()) > -1) return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start">
-                                                    <Typography key={i} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography><CheckCircleIcon color="primary" sx={{width: 15}}/>
+                                            {input.genes.map((i, ind)=>{
+                                                if ((verified.kinase_phosphosites || []).indexOf(i.trim().toUpperCase()) > -1) return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
+                                                    <Typography color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
+                                                    </Stack>
+                                                else if ((verified.substrates || []).indexOf(i.trim().split("_")[0].toUpperCase()) > -1) return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
+                                                    <Typography color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
                                                     </Stack>
                                                 else {
                                                     if (i === '') return null
-                                                    else return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start">
-                                                        <Typography align='left' color={'default'} sx={{fontSize: 14}}>{i}</Typography>
+                                                    else return <Stack direction='row' key={`${i}-${ind}`} spacing={1} alignItems={"center"} justifyContent="flex-start">
+                                                        <Typography align='left' color={'default'} sx={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" sx={{width: 15}}/>
                                                         </Stack>
                                                 }
                                             })}
@@ -303,45 +322,43 @@ const GeneSetForm = ({
                                 }
                             </div>
                         </Grid>
-                        <Grid item xs={fullWidth? 6: 12} sx={{textAlign: "left"}}>
+                        <Grid item xs={fullWidth? 8: 12} sx={{textAlign: "left"}}>
                             <Stack direction={"row"} spacing={1} alignItems="center">
-                                <Tooltip title={input.genes.length === 0 ? "Input gene set": libraries.length === 0 ? "Select libraries": (loading || verifying) ? "Loading...": "Submit"}>
-                                    <Button 
-                                        onClick={async ()=>{
-                                            // setSubmitted('true')
-                                            if (!(await same_prev_input())) {
-                                                if (input.genes.length > 0 && libraries.length > 0) {
-                                                    addList()
-                                                }
-                                            } else {
-                                                const {search, augment, augment_limit, gene_links, ...rest} = combined_query
-                                                // setSubmitted(false)
-                                                router_push(router, pathname, {
-                                                    q: JSON.stringify({
-                                                        ...rest,
-                                                        libraries: libraries,
-                                                        search: true
-                                                    })
-                                                })
+                               <Button 
+                                    onClick={async ()=>{
+                                        // setSubmitted('true')
+                                        if (!(await same_prev_input())) {
+                                            if (input.genes.length > 0 && libraries.length > 0) {
+                                                addList()
                                             }
-                                        }}
-                                        disabled={loading == 'true' || verifying || libraries.length === 0 || input.genes.length === 0}
-                                        size="large"
-                                        variant="contained"
-                                        sx={{
-                                            padding: "15px 30px"
-                                        }}
-                                        // disabled={input.genes.length === 0}
-                                    >{loading || verifying ? "Searching...": "Submit"}</Button>
-                                </Tooltip>
-                                {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched kinase phosphosite"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched phosphosites`}</Typography></Button></Tooltip>}
+                                        } else {
+                                            const {search, augment, augment_limit, gene_links, ...rest} = combined_query
+                                            // setSubmitted(false)
+                                            router_push(router, pathname, {
+                                                q: JSON.stringify({
+                                                    ...rest,
+                                                    libraries: libraries,
+                                                    search: true
+                                                })
+                                            })
+                                        }
+                                    }}
+                                    disabled={loading == 'true' || verifying || libraries.length === 0 || input.genes.length === 0}
+                                    size="large"
+                                    variant="contained"
+                                    sx={{
+                                        padding: "15px 30px"
+                                    }}
+                                    // disabled={input.genes.length === 0}
+                                >{loading || verifying ? "Searching...": "Submit"}</Button>
+                                
+                                {(((verified.substrates || []).length > 0 || (verified.kinase_phosphosites || []).length > 0) && input.genes.length > 0 && parsedParams.userListId === undefined) && <Tooltip title="Matches"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.kinase_phosphosites.length} matched kinase phosphosites and ${verified.substrates.length} matched substrates`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>
                         { fullWidth && 
-                            <Grid item xs={fullWidth? 6: 12} sx={{textAlign: "right"}}>
+                            <Grid item xs={fullWidth? 4: 12} sx={{textAlign: "right"}}>
                                 <Button 
                                     onClick={()=>{
-                                        console.log("example", example)
                                         const {gene_set, description} = example
                                         setInput({genes: gene_set.split('\n'), description: description})
                                     }}
