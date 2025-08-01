@@ -23,6 +23,7 @@ export const kea_query = async ({
     let d = info
     // const gs = await verify_input(d.set, true)
     // const gs = s.split('\r\n')
+    console.log(d.set.map(i=>i.split("_")[0]).join("\n"))
     const res = await fetch(`${process.env.NEXT_PUBLIC_KEA3_URL}/api/enrich/`, {
         method: 'POST',
         headers: {
@@ -45,7 +46,7 @@ export const kea_query = async ({
         regex[k] = new RegExp(v)
     }
     const results = await res.json()
-
+    console.log(results.slice(0, 20))
     const terms = {}
     const genes = {}
     let max_score = 0

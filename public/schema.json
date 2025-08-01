@@ -260,7 +260,7 @@
                     "libraries": [
                         {
                             "name": "Integrated--meanRank",
-                            "node": "Transcription Factor"
+                            "node": "kinase"
                         }
                     ],
                     "sortLibraries": false,

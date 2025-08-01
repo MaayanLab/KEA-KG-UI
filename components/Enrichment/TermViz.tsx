@@ -26,7 +26,7 @@ const TermViz = ({view, elements}:
 		if (dt.data.kind !== "Relation") {
 			const {enrichr_label} = properties
 			const id = `${properties.library}: ${enrichr_label} (${i})`
-			if (entries[id] === undefined && kind !== "Search TFs") {
+			if (entries[id] === undefined && properties.score) {
 				const {
 					library,
 					score,
