@@ -16,29 +16,30 @@ import domtoimage from 'dom-to-image';
 
 const libs_sorted = [
 	"BioGRID",
-	"Cheng.KSIN",
+	"ChengKSIN",
 	"HIPPIE",
-	"Mentha",
+	"mentha",
 	"MINT",
-	"Cheng.PPI",
+	"ChengPPI",
 	"PTMsigDB",
 	"STRING",
 	"STRING.bind",
-	"PhosD.All",
-	"PrePPI",
+	"PhosDAll",
+	"prePPI",
 	"The_Kinase_Library"
 ]
-const palette =  {"BioGRID": "rgb(158, 1, 66)",
-"Cheng.KSIN": "rgb(202, 50, 74)",
+const palette =  {
+"BioGRID": "rgb(158, 1, 66)",
+"ChengKSIN": "rgb(202, 50, 74)",
 "HIPPIE": "rgb(232, 94, 73)",
-"Mentha": "rgb(248, 142, 83)",
+"mentha": "rgb(248, 142, 83)",
 "MINT": "rgb(253, 190, 112)",
-"Cheng.PPI": "rgb(254, 227, 149)",
+"ChengPPI": "rgb(254, 227, 149)",
 "PTMsigDB": "rgb(251, 248, 176)",
 "STRING": "rgb(231, 245, 163)",
 "STRING.bind": "rgb(190, 229, 160)",
-"PhosD.All": "rgb(137, 207, 165)",
-"PrePPI": "rgb(86, 173, 174)",
+"PhosDAll": "rgb(137, 207, 165)",
+"prePPI": "rgb(86, 173, 174)",
 "The_Kinase_Library": "rgb(67, 127, 180)",}
 const renderCustomizedLabel = (props) => {
 	const {
@@ -113,7 +114,7 @@ export const EnrichmentBar = (props: {
 	}
 	const [download_image, setDownloadImage] = useQueryState('download_image')
 	// function exportChart() {
-
+	
 	// 	// A Recharts component is rendered as a div that contains namely an SVG
 	// 	// which holds the chart. We can access this SVG by calling upon the first child/
 	// 	let chartSVG = ReactDOM.findDOMNode(barRef.current).children[0];
@@ -174,7 +175,6 @@ export const EnrichmentBar = (props: {
 							{data_cells}
 						</Bar> */}
 						{libs_sorted.filter(i=>stacks.indexOf(i)>-1).map((lib,i)=>{
-							console.log(lib)
 							return(<Bar key={`${lib}-${i}`} dataKey={lib} stackId={'a'} fill={palette[lib]} barSize={barSize}>
 								{/* {i === 0 && <LabelList dataKey="enrichr_label" position="left" content={renderCustomizedLabel} fill={fontColor}/>} */}
 								{data_cells}

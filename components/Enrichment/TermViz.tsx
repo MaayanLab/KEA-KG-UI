@@ -49,7 +49,7 @@ const TermViz = ({view, elements}:
 				if (Array.isArray(libs) && entries[id].rank_sum !== undefined && typeof(entries[id].rank_sum) == 'number') {
 					const rank_sum = entries[id].rank_sum as number
 					for (const {library, score} of libs) {
-						entries[id][library] = (parseInt(`${score}`)*entries[id].score)/rank_sum
+						entries[id][library] = ((parseInt(`${score}`))/rank_sum)*entries[id].score
 						if (libraries.indexOf(library) === -1) libraries.push(library)
 					}	
 				}
