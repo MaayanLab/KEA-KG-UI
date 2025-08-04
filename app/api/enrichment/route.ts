@@ -13,7 +13,8 @@ const get_node_color_and_type = ({node,
     aggr_scores,
     field,
     aggr_field,
-    fields
+    fields,
+    input_list
 }: {
     node: {[key:string]: any},
     terms?: Array<string>,
@@ -23,10 +24,22 @@ const get_node_color_and_type = ({node,
     aggr_field?: string,
     aggr_type?: string,
     fields?: Array<string>,
+    input_list: Array<string>,
 }) => {
-    if (node.score === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
-    else {
+    if (node.score === undefined) {
+        const props = default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
+        if (input_list.indexOf(node.label) > -1) {
+            props.borderColor = "#FFB6C1"
+            props.borderWidth = 7
+        }
+        return props
+
+    }else {
         const props = compute_colors({properties: node, aggr_scores: aggr_scores.score, color}) 
+        if (input_list.indexOf(node.label) > -1) {
+            props.borderColor = "#FFB6C1"
+            props.borderWidth = 7
+        }
         for (const i in node.enrichment || []) {
             const v = node.enrichment[i]
             node.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores: aggr_scores.score, color}) }
@@ -239,7 +252,11 @@ const enrichment = async ({
         const query = query_list.join(' UNION ')
         const query_params = {limit: expand_limit, ...vars}
         const enrichment_subtypes = {query_terms: input_set, result_terms: returned}
-        return resolve_results({query, kind_mapper, enrichment_subtypes, query_params, aggr_scores, colors, kind_properties: terms, get_node_color_and_type, arrow_shape})
+        return resolve_results({query, kind_mapper, enrichment_subtypes, query_params, aggr_scores, colors, kind_properties: terms, get_node_color_and_type, arrow_shape,
+            misc_props: {
+                input_list: input_set,
+            }
+        })
     } catch (error) {
         throw error
     }

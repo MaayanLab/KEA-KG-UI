@@ -18,9 +18,8 @@ export const kea_query = async ({
         throw new Error(`Error fetching gene set from ID`)
     }
     
-    const info = await data.json()
+    const d = await data.json()
     console.log(`sending to KEA3`)
-    let d = info
     // const gs = await verify_input(d.set, true)
     // const gs = s.split('\r\n')
     
@@ -30,7 +29,7 @@ export const kea_query = async ({
             'Content-Type': 'application/json'
            },
         body: JSON.stringify( {
-            query_name: info.desc,
+            query_name: d.desc,
             gene_set: d.set.map(i=>i.split("_")[0])
         })
     }

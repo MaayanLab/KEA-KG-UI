@@ -121,13 +121,13 @@ export const Legend = ({
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
-      if (ring_label && !colors[ring_label] && borderColor && !not_significant) {
-        colors[ring_label] = <Grid item xs={12} key={ring_label}>
-        <Grid container alignItems={"center"} spacing={1} key={ring_label}>
+      if (borderColor) {
+        colors["part of input set"] = <Grid item xs={12} key={'part_of_input'}>
+        <Grid container alignItems={"center"} spacing={1} key={'part_of_input'}>
           <Grid item>
             <Avatar sx={{background: "#FFF", borderColor: borderColor, borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
           </Grid>
-          <Grid item><Typography variant="subtitle1">{ring_label}</Typography></Grid>   
+          <Grid item><Typography variant="subtitle1">part of input</Typography></Grid>   
         </Grid></Grid>   
       }
     }

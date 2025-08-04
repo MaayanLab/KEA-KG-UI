@@ -127,18 +127,7 @@ export const convert_query = (req: NextRequest) => {
 }
 
 export const kind_mapper = ({node, type, enrichment_subtypes, augmented_genes, gene_list}) => {
-    const label = node.label
-    if (enrichment_subtypes !== undefined) {
-        if ((enrichment_subtypes.query_terms || []).indexOf(node.properties.label) > -1) {
-            if (node.properties.label.split("_").length > 1) {
-                return "input_kinase_phosphosite"
-            } else {
-                return "input_kinase"
-            }
-        }
-    }
-    return type
-    
+    return type    
 }
 
 export const augment_gene_set = async ({gene_list, augment_limit}) => {
@@ -205,8 +194,8 @@ export const compute_colors = ({properties, aggr_scores, color}:{
     const max_pval = aggr_scores.max //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
     const min_pval = aggr_scores.min
     const darken =  Math.abs((properties.pval - min_pval)/(max_pval-min_pval))
-    props.gradient_color = properties.kind == 'Queried TFs that are also enriched'? "#ff8a81" : '#8ad6ff'
-    props.color = properties.kind == 'Queried TFs that are also enriched'? "#ff8a81" : '#8ad6ff'
+    props.gradient_color = get_color({color, darken})
+    props.color = color
 
     return props
 }
@@ -251,6 +240,7 @@ export const get_node_color_and_type_augmented = ({node,
         return props
     }	
 }
+
 
 // support old queries
 export interface FilterSchema {
