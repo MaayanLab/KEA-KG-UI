@@ -101,6 +101,7 @@
             "match": [
                 "phosphosite"
             ],
+            "directed": "triangle",
             "display": [
                 {
                     "label": "source label",
