@@ -99,7 +99,7 @@ const InteractiveButtons = ({
     const [openShare, setOpenShare] = useState<boolean>(false)
     const [geneLinks, setGeneLinks] = useState<Array<string>>([])
     const [additionalLinkTags, setAdditionalLinkTags] = useState<Array<string>>([])
-    const [edgeFilter, setEdgeFilter] = useState<{zscore?: number, add_nodes?: number}>({})
+    const [edgeFilter, setEdgeFilter] = useState<{zscore?: number, libraries?:[{"name":"Integrated--meanRank","limit"?:number}]}>({})
     const [loading, setLoading] = useState(false)
     useEffect(()=>{
         if (gene_links) setGeneLinks(gene_links)
@@ -119,10 +119,10 @@ const InteractiveButtons = ({
 
     const user_filter = {
         zscore: parsedParams.zscore || min_z,
-        add_nodes: parsedParams.add_nodes || 10
+        libraries: [{"name":"Integrated--meanRank","limit":parsedParams.libraries[0].limit || 10}]
     }
     
-    const disable_button = Object.keys(edgeFilter).length === 0 || (user_filter.zscore === edgeFilter.zscore && user_filter.add_nodes === edgeFilter.add_nodes)
+    const disable_button = Object.keys(edgeFilter).length === 0 || (user_filter.zscore === edgeFilter.zscore && JSON.stringify(user_filter.libraries) === JSON.stringify(edgeFilter.libraries))
     return (
         <Grid container>
             <Grid item xs={12}>
@@ -430,12 +430,12 @@ const InteractiveButtons = ({
                 <Tooltip title={`Change number of top-ranked nodes from ChEA3`}>
                     <Slider 
                         color="secondary"
-                        value={edgeFilter.add_nodes !== undefined ? edgeFilter.add_nodes : parsedParams.add_nodes ? parsedParams.add_nodes : 10}
+                        value={edgeFilter.libraries !== undefined ? (edgeFilter.libraries[0].limit || 10)  : parsedParams.libraries ? parsedParams.libraries[0].limit || 10 : 10}
                         onChange={(e, nv:number)=>{
                             // router_push(router, pathname, {
                             //     q: JSON.stringify({...parsedParams, pvalue: nv}),
                             // })
-                            setEdgeFilter({...edgeFilter, add_nodes: nv})
+                            setEdgeFilter({...edgeFilter, libraries: [{"name":"Integrated--meanRank","limit":nv}]})
 
                         }}
                         sx={{width: "12%"}}
@@ -462,19 +462,19 @@ const InteractiveButtons = ({
                 <Tooltip title={`Submit changes`}>
                     <IconButton disabled={disable_button} sx={{position: "relative"}}>
                         <Link onClick={()=>{
-                            if ((user_filter.zscore !== edgeFilter.zscore || min_z) || (user_filter.add_nodes !== edgeFilter.add_nodes || 10)) 
+                            if ((user_filter.zscore !== edgeFilter.zscore || min_z) || (user_filter.libraries[0].limit !== edgeFilter.libraries[0].limit || 10)) 
                                 setLoading(true)
                             }} 
                             href={`${pathname}?q=${JSON.stringify({...parsedParams, ...edgeFilter})}${layout ? "&layout=" + layout: ""}`}>
                             
-                                <SendIcon/> {loading && <CircularProgress sx={{position: "absolute", left: 0}}/>}
+                            <SendIcon/> {loading && <CircularProgress sx={{position: "absolute", left: 0}}/>}
                             
                         </Link>
                     </IconButton>
                 </Tooltip>
                 <div style={{ marginLeft: 'auto' }}>
                 <Tooltip title={`Reset subnetwork`}>
-                <Link href={`${pathname}?q=${JSON.stringify({...parsedParams, zscore:0, add_nodes:10, remove:[], expand:[]})}${layout ? "&layout=" + layout: ""}`} >
+                <Link href={`${pathname}?q=${JSON.stringify({...parsedParams, zscore:0, libraries: [{"name":"Integrated--meanRank","limit":10}], remove:[], expand:[]})}${layout ? "&layout=" + layout: ""}`} >
                     <Button 
                         size="small"
 	                    variant="contained"

@@ -37,6 +37,12 @@ export interface EnrichmentParams {
     zscore?: number,
     add_nodes?: number,
     limit?: number,
+    libraries?: Array<{
+        name?: string,
+        limit?: number,
+        library?: string,
+        term_limit?: number, 
+    }>,
 }
 
 const Enrichment = async ({

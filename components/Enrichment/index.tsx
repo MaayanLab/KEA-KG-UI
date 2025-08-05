@@ -62,8 +62,6 @@ const Enrichment = async ({
         gene_degree?: number,
         term_degree?: number,
         libraries: Array<{
-            name?: string,
-            limit?: number,
             library?: string,
             term_limit?: number
         }>,

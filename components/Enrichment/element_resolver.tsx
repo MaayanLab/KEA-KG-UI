@@ -10,7 +10,7 @@ export const get_element = async(parsedParams:EnrichmentParams)=>{
 	let max_p = 0
 	let min_z = 100
 	let max_z = 0
-	const libraries = [{"library":"Integrated--meanRank","term_limit":10}]
+	// const default_libraries = [{"library":"Integrated--meanRank","term_limit":10}]
 	const {
 		userListId,
 		gene_limit,
@@ -25,6 +25,7 @@ export const get_element = async(parsedParams:EnrichmentParams)=>{
 		zscore, 
 		add_nodes,
 		limit,
+		libraries=[{"name":"Integrated--meanRank","limit":10}],
 	} = parsedParams
 	console.log("Here", userListId)
 	if (userListId !==undefined) {
@@ -43,7 +44,7 @@ export const get_element = async(parsedParams:EnrichmentParams)=>{
 				method: "POST",
 				body: JSON.stringify({
 					userListId,
-					libraries,
+					libraries: libraries.map(({name, limit})=>({library: name, term_limit: limit || 10})),
 					min_lib,
 					gene_limit,
 					gene_degree,

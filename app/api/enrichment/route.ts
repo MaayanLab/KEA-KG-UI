@@ -96,10 +96,10 @@ const enrichment = async ({
                     node_library[library] = node
                 }
             }
-            if(add_nodes !== undefined){
-                term_limit = add_nodes
+            // if(add_nodes !== undefined){
+            //     term_limit = add_nodes
 
-            }
+            // }
             // term limit is doubled in kea_query -- returns twice as many results
             return await kea_query({userListId, term_limit, library, min_lib: 3, term_degree})
         }  
