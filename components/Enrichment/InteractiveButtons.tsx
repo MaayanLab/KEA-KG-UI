@@ -424,7 +424,7 @@ const InteractiveButtons = ({
                     }
                 </Stack>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
             <Stack direction={"row"} alignItems={"center"} spacing={2}>
                 <Typography variant='subtitle2'>Add/remove nodes:</Typography>
                 <Tooltip title={`Change number of top-ranked nodes from ChEA3`}>
@@ -486,7 +486,7 @@ const InteractiveButtons = ({
                 </Tooltip>    
                 </div>            
             </Stack>
-        </Grid>
+        </Grid> */}
         {(elements && geneLinksOpen) &&
             <Grid item xs={12}>
                 <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
