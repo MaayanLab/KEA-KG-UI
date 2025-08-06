@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   // optionally access and extend (rather than replace) parent metadata
   const metadata: Metadata = {
     title: header.icon.faviconTitle || header.title,
-    description: 'Search for subnetworks within the KEA-KG GRN by entering one or two kinases. The background GRN contains 131,181 signed and directed kinase-kinase regulatory relationships between 1559 source and 700 target human transcription factors.',
+    description: 'Search for subnetworks within the KEA-KG GRN by entering one or two kinases or kinase phosphosites. The background GRN contains 42,322 kinase-phosphorylation relationships between 466 unique human kinases and 20,192 kinase phosphosites.',
     icons: {
       icon: header.icon.favicon
     },

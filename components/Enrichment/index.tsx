@@ -204,8 +204,8 @@ const Enrichment = async ({
                             <Card sx={{borderRadius: "24px", minHeight: 450, width: "100%"}}>
                                 <CardContent>
                                     {input_desc ? 
-                                        <Typography variant="h5" sx={{textAlign: "center"}}><b>Enriched TF Subnetwork for {input_desc}</b></Typography>:
-                                        <Typography variant="h5" sx={{textAlign: "center"}}><b>Enriched TF Subnetwork for Input Gene Set</b></Typography>
+                                        <Typography variant="h5" sx={{textAlign: "center"}}><b>Enriched Kinase-Phosphosite Subnetwork for {input_desc}</b></Typography>:
+                                        <Typography variant="h5" sx={{textAlign: "center"}}><b>Enriched Kinase-Phosphosite Subnetwork for Input Phosphosite Set</b></Typography>
                                     }
                                     <TermViz
                                         elements={elements}
